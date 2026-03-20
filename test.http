@@ -1,0 +1,27 @@
+### Create Author
+POST http://localhost:4004/odata/v4/catalog/Authors
+Content-Type: application/json
+
+{
+  "name": "New Author"
+}
+
+
+### Posting data for checking action
+POST http://localhost:4004/odata/v4/catalog/applyDiscount
+Content-Type: application/json
+
+{
+  "ID": "550e8400-e29b-41d4-a716-446655440000",
+  "percentage": 2
+}
+
+### Create Book referencing Author
+PATCH   http://localhost:4004/odata/v4/catalog/Books(ID=550e8400-e29b-41d4-a716-446655440000)
+Content-Type: application/json
+
+{
+  "title": "The Artist",
+  "price": 200,
+  "stock": 50
+}
