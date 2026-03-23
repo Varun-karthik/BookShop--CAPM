@@ -3,14 +3,11 @@ entity Books : AuditInfo{    //Aspect is added after : beside entity name
     key ID: UniqueNumber;  
     @title: 'Book Name'
     title : Name; //Unlimited length
-    @UI.lineItem: [{ position: 2 }]
-    @UI.identification: [{ position: 2 }]
     @mandatory
     price : Number;
-    @UI.lineItem: [{ position: 1 }]
-    @UI.identification: [{ position: 1 }]
     stock: Number;// Reusing data type instead of creating repeatedly
-    percentage:Decimal(5, 2)
+    percentage:Decimal(5, 2);
+    category : Name
 }
 
 // Instead of using a data type repeatedly we create a type and reuse it 
