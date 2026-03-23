@@ -7,7 +7,7 @@ entity Books : AuditInfo{    //Aspect is added after : beside entity name
     price : Number;
     stock: Number;// Reusing data type instead of creating repeatedly
     percentage:Decimal(5, 2);
-    category : Name
+    category : Name;
 }
 
 // Instead of using a data type repeatedly we create a type and reuse it 
