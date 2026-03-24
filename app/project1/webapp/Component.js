@@ -21,6 +21,10 @@ sap.ui.define([
 
             // enable routing
             this.getRouter().initialize();
+
+            // const oModel=this.getModel("Service_Model")  // Declaring Model Globally for all controllers
+            // const model=this.setModel(oModel,"Service_Model")
+            // console.log(model)
         }
     });
 });

@@ -1,6 +1,6 @@
 namespace my.bookstore;
 entity Books : AuditInfo{    //Aspect is added after : beside entity name 
-    key ID: UniqueNumber;  
+    key ID: Number;  
     @title: 'Book Name'
     title : Name; //Unlimited length
     @mandatory
@@ -14,7 +14,6 @@ entity Books : AuditInfo{    //Aspect is added after : beside entity name
 
 type Number : Integer; //Limited length
 type Name : String(50); // type is string 
-type UniqueNumber : UUID; //Generates id Automatically
 
 
 // Using aspects we use this if multiple tables have same columns 
@@ -25,19 +24,19 @@ aspect AuditInfo {
 //Associations
 entity Authors{
   @Capabilities.InsertRestrictions.Insertable: true
-  key ID: UniqueNumber; //One to one Association
+  key ID: Number; //One to one Association
       name : Name;
       books : Association to Books//One to Many Association
 }
 
 // Composition
 entity Orders{
-  key ID: UniqueNumber;
+  key ID: Number;
   items: Composition of many OrderItems on items.order=$self;
 }
 
 entity OrderItems{
-  key ID:UniqueNumber;
+  key ID:Number;
   product : Name;
   order: Association to Orders
 }

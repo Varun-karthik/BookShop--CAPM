@@ -1,6 +1,45 @@
 <mvc:View controllerName="project1.controller.View1"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+    <Page id="page" title="Book Shop">
+    <OverflowToolbar  width="100%" >
+        <SearchField width="40%" placeholder="Search" class="sapUiTinyMargin" liveChange="onSearch"></SearchField>
+        <ToolbarSpacer ></ToolbarSpacer>
+        <FlexBox direction="Row"  alignContent="SpaceAround">
+            <Button text="Add Book" icon="sap-icon://add" width="250px" press="onCreate"></Button>
+        </FlexBox>
+    </OverflowToolbar>
+    <Table id="BooksTable" headerText="Books Table" class="sapUiResponsivePadding"
+    items="{Service_Model>/Books}"
+    mode="Delete" 
+    delete="onDelete">
+    <columns>
+    <Column ><Text text="ID"></Text> </Column>
+    <Column ><Text text="Book Name"></Text> </Column>
+    <Column ><Text text="Category"></Text> </Column>
+    <Column ><Text text="Price"></Text> </Column>
+    <Column ><Text text="Stock"></Text> </Column>
+    <Column ><Text text="Created At"></Text> </Column>
+    <Column ><Text text="Created By"></Text> </Column>
+    <Column ><Text text="Actions"></Text></Column>
+    </columns>
+    <items>
+        <ColumnListItem type="Active" >
+            <cells>
+                <Text text="{Service_Model>ID}"></Text>
+                <Text text="{Service_Model>title}"></Text>
+                <Text text="{Service_Model>category}"></Text>
+                <Text text="{Service_Model>price}"></Text>
+                <Text text="{Service_Model>stock}"></Text>
+                <Text text="{Service_Model>createdAt}"></Text>
+                <Text text="{Service_Model>createdBy}"></Text>
+                <HBox direction="Row" >
+                <Button text="Update Record" icon="sap-icon://edit" type="Transparent" tooltip="Update" press="onUpdate"></Button>
+            </HBox>
+            </cells>
+        </ColumnListItem>
+    </items>
+    </Table>
+    
     </Page>
 </mvc:View>

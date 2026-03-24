@@ -14,7 +14,7 @@ Content-Type: application/json
 POST  http://localhost:4004/odata/v4/catalog/Books
 Content-Type: application/json
 
-{
+{ "ID": 50,
   "title": "The Art",
   "price": 502,
   "stock":20
