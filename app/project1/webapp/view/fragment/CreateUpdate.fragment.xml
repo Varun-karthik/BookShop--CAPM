@@ -9,7 +9,7 @@
     layout="ResponsiveGridLayout">
 
     <Label text="ID"/>
-    <Input value="{Service_Model>/Books/ID}" required="true" type="Number" id="id"/>
+    <Input required="true" type="Number" id="id"/>
 
     <Label text="Book Name"/>
     <Input required="true" id="name"/>
