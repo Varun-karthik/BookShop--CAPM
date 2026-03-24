@@ -26,7 +26,7 @@ sap.ui.define([
             // })
 
         },
-        onCreate:function()
+        _openDialog:function()
         {
             var oView=this.getView();
             if(!this.cDialog){
@@ -45,6 +45,35 @@ sap.ui.define([
             }
             
         },
+        onCreate: function () 
+        {
+            this._openDialog().then(function (oDialog) {
+                oDialog.open();
+                // clear fields
+                this.getView().byId("id").setValue("");
+                this.getView().byId("name").setValue("");
+                this.getView().byId("price").setValue("");
+                this.getView().byId("stock").setValue("");
+                this.getView().byId("cat").setValue("");
+                this.getView().byId("cby").setValue("");
+            }.bind(this));
+        },
+        onUpdate: function (oEvent) 
+        {
+            var oData= oEvent.getSource().getBindingContext("Service_Model")
+            console.log("oData ", oData)
+            this._openDialog().then(function (oDialog) {
+                oDialog.open();
+                // clear fields
+                this.getView().byId("id").setValue("");
+                this.getView().byId("name").setValue("");
+                this.getView().byId("price").setValue("");
+                this.getView().byId("stock").setValue("");
+                this.getView().byId("cat").setValue("");
+                this.getView().byId("cby").setValue("");
+            }.bind(this));
+        },
+        
         onCancel:function()
         {
             this.getView().byId("id").setValue("");
@@ -116,14 +145,14 @@ sap.ui.define([
             // })
             console.log("Deleted Row Data:", oData);
         },
-        onUpdate:function(oEvent){
-            var oItem=oEvent.getParameter("listItem");
-            var oContext= oItem.getBindingContext("Service_Model");
-            oContext.setProperty().then(()=>{
-                
-            })
-            var oData= oContext.getObject();
+        // onUpdate:function(oEvent){
+        //     var oItem=oEvent.getParameter("listItem");
+        //     var oContext= oItem.getBindingContext("Service_Model");
+        //     oContext.setProperty().then(()=>{
 
-        }
+        //     })
+        //     var oData= oContext.getObject();
+
+        // }
     });
 });
