@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/Fragment",
-	"sap/m/MessageBox"
-], (Controller,Fragment,MessageBox) => {
+	"sap/m/MessageBox",
+    "sap/m/MessageToast"
+], (Controller,Fragment,MessageBox,MessageToast) => {
     "use strict";
 
     return Controller.extend("project1.controller.View1", {
@@ -27,7 +28,7 @@ sap.ui.define([
 
         },
         _openDialog:function()
-        {
+        {   
             var oView=this.getView();
             if(!this.cDialog){
                 this.cDialog = Fragment.load({
@@ -36,17 +37,17 @@ sap.ui.define([
                     controller:this
                     }).then(function(oDialog){
                         oView.addDependent(oDialog);   
-                        this.cDialog = oDialog;
-                        oDialog.open();
-                    }.bind(this))
+                        return oDialog   // Returns Dialog
+                    })
                 }
-            else{
-                this.cDialog.open()
-            }
+            return  this.cDialog //returns Promise
+            
             
         },
         onCreate: function () 
-        {
+        {   
+            // Marking mode for using in save button
+            this.mode="create"
             this._openDialog().then(function (oDialog) {
                 oDialog.open();
                 // clear fields
@@ -54,23 +55,30 @@ sap.ui.define([
                 this.getView().byId("name").setValue("");
                 this.getView().byId("price").setValue("");
                 this.getView().byId("stock").setValue("");
-                this.getView().byId("cat").setValue("");
                 this.getView().byId("cby").setValue("");
             }.bind(this));
         },
         onUpdate: function (oEvent) 
         {
-            var oData= oEvent.getSource().getBindingContext("Service_Model")
+            // Marking mode for using in save button
+            this.mode="update"
+            var oContext = oEvent.getSource().getBindingContext("Service_Model");
+            
+            // STORING CONTEXT TO USE IN SAVE
+            this.oUpdateContext= oContext;
+
+            //Provinding Details into Frgment 
+            var oData= oContext.getObject()
             console.log("oData ", oData)
             this._openDialog().then(function (oDialog) {
                 oDialog.open();
                 // clear fields
-                this.getView().byId("id").setValue("");
-                this.getView().byId("name").setValue("");
-                this.getView().byId("price").setValue("");
-                this.getView().byId("stock").setValue("");
-                this.getView().byId("cat").setValue("");
-                this.getView().byId("cby").setValue("");
+                this.getView().byId("id").setValue(oData.ID);
+                this.getView().byId("id").setEditable(false);
+                this.getView().byId("name").setValue(oData.title);
+                this.getView().byId("price").setValue(oData.price);
+                this.getView().byId("stock").setValue(oData.stock);
+                this.getView().byId("cby").setValue(oData.createdBy);
             }.bind(this));
         },
         
@@ -82,7 +90,9 @@ sap.ui.define([
             this.getView().byId("stock").setValue("");
             this.getView().byId("cby").setValue("")
 
-            this.cDialog.close();
+            this._openDialog().then(function (oDialog) {
+                oDialog.close();
+            });
         },
 
         // Posting Data 
@@ -93,12 +103,9 @@ sap.ui.define([
             var Name = this.getView().byId("name").getValue();
             var Price = this.getView().byId("price").getValue();
             var Stock = this.getView().byId("stock").getValue();
-            var CBY = this.getView().byId("cby").getValue("")
+            var CBY = this.getView().byId("cby").getValue();
 
-            if(!ID || !Name || Price || Stock || CBY){
-                MessageBox.error("Please fill Mandatory Feilds");
-                
-            }
+            var oModel=this.getOwnerComponent().getModel("Service_Model")
 
             var newData=
                 {
@@ -107,18 +114,56 @@ sap.ui.define([
                 "price": Number(Price),
                 "stock":Number(Stock),
                 "createdBy":CBY
-        }
-        
-        var oModel=this.getOwnerComponent().getModel("Service_Model")
-        oModel.bindList("/Books").create(newData);
+                }
+
+            if(this.mode=="create"){
+                
+                if(!ID || !Name || !Price )
+                    {
+                        MessageBox.error("Please fill Mandatory Feilds");
+                    }
+                
+                oModel.bindList("/Books").create(newData);
+                MessageToast.show("Book Added Successfully")
+            }
+            else if(this.mode=="update"){
+                
+                // Standarad Way (Recomended)
+
+                this.oUpdateContext.setProperty("title",Name)
+                this.oUpdateContext.setProperty("price",Price)
+                this.oUpdateContext.setProperty("stock",Stock)
+                this.oUpdateContext.setProperty("createdBy",CBY)
+
+                MessageToast.show("Book Details Updated Sucessfully")
+
+                // Alternate Way to Update if we know ID
+                // var sPath = "/Books("+ ID +")"
+                // console.log(sPath )
+                // var oContextBinding=oModel.bindContext("/Books("+ ID +")")
+                // console.log(oContextBinding);
+
+                // var oContext=oContextBinding.getBoundContext();
+                // console.log(oContext)
+                // oContext.setProperty("title",Name)
+                // oContext.setProperty("price",Price)
+                // oContext.setProperty("stock",Stock)
+                // oContext.setProperty("createdBy",CBY)
+
+            }
 
         this.getView().byId("BooksTable").getBinding("items").refresh()
+        this.getView().byId("id").setEditable(true)
         this.getView().byId("id").setValue("");
         this.getView().byId("name").setValue("");
         this.getView().byId("price").setValue("");
         this.getView().byId("stock").setValue("");
         this.getView().byId("cby").setValue("")
-        this.cDialog.close();
+        
+        // Closing the Dialog
+        this._openDialog().then(function (oDialog) {
+                oDialog.close();
+            });
         },
 
         // Deleting Record

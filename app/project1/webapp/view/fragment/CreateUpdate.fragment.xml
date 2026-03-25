@@ -9,7 +9,7 @@
     layout="ResponsiveGridLayout">
 
     <Label text="ID"/>
-    <Input required="true" type="Number" id="id"/>
+    <Input required="true" type="Number" editable="true" id="id"/>
 
     <Label text="Book Name"/>
     <Input required="true" id="name"/>
