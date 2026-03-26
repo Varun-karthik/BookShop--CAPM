@@ -84,6 +84,7 @@ sap.ui.define([
         
         onCancel:function()
         {
+            this.getView().byId("id").setEditable(true)
             this.getView().byId("id").setValue("");
             this.getView().byId("name").setValue("");
             this.getView().byId("price").setValue("");
@@ -124,15 +125,16 @@ sap.ui.define([
                     }
                 
                 oModel.bindList("/Books").create(newData);
-                MessageToast.show("Book Added Successfully")
+                this.getView().byId("BooksTable").getBinding("items").refresh();
+                MessageToast.show("Book Added Successfully");
             }
             else if(this.mode=="update"){
                 
                 // Standarad Way (Recomended)
 
                 this.oUpdateContext.setProperty("title",Name)
-                this.oUpdateContext.setProperty("price",Price)
-                this.oUpdateContext.setProperty("stock",Stock)
+                this.oUpdateContext.setProperty("price",Number(Price)) // In fragment We gave type= Number so we are explicitly converting String into Number
+                this.oUpdateContext.setProperty("stock",Number(Stock))
                 this.oUpdateContext.setProperty("createdBy",CBY)
 
                 MessageToast.show("Book Details Updated Sucessfully")
@@ -150,9 +152,7 @@ sap.ui.define([
                 // oContext.setProperty("stock",Stock)
                 // oContext.setProperty("createdBy",CBY)
 
-            }
-
-        this.getView().byId("BooksTable").getBinding("items").refresh()
+            } 
         this.getView().byId("id").setEditable(true)
         this.getView().byId("id").setValue("");
         this.getView().byId("name").setValue("");
@@ -164,7 +164,11 @@ sap.ui.define([
         this._openDialog().then(function (oDialog) {
                 oDialog.close();
             });
+
+        // Refresh after changes are submitted
+        // this.getView().byId("BooksTable").getBinding("items").refresh();
         },
+
 
         // Deleting Record
         onDelete: function (oEvent) {
