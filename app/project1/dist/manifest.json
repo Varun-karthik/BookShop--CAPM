@@ -12,7 +12,7 @@
 		"applicationVersion": {
 			"version": "0.0.1"
 		},
-		"title": "{{appTitle}}",
+		"title": "Book Shop",
 		"description": "{{appDescription}}",
 		"resources": "resources.json",
 		"sourceTemplate": {
@@ -48,7 +48,7 @@
 		}
 	},
 	"sap.ui5": {
-		"flexEnabled": true,
+		"flexEnabled": false,
 		"dependencies": {
 			"minUI5Version": "1.146.0",
 			"libs": {
@@ -70,7 +70,7 @@
 					]
 				}
 			},
-			"": {
+			"Service_Model": {
 				"dataSource": "mainService",
 				"preload": true,
 				"settings": {
