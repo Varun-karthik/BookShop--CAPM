@@ -10,7 +10,6 @@
   },
   "devDependencies": {
     "@cap-js/sqlite": "^2",
-    "@sap/cds": "^9.8.3",
     "@sap/cds-dk": "^9",
     "cds-plugin-ui5": "^0.13.0",
     "mbt": "^1.2.29",
@@ -29,9 +28,13 @@
       "db": {
         "kind": "hana"
       },
-      "[production]": {
-        "auth": {
-          "kind": "mocked"
+      "auth": {
+        "kind": "mocked",
+        "users": {
+          "varun": {
+            "password": "Varun@123",
+            "roles":["user"]
+          }
         }
       }
     }
